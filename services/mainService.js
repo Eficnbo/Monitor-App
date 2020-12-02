@@ -6,4 +6,9 @@ const postMorningData = async(sleepdur,sleepqua,mood,user_id) => {
 	
 }
 
-export { postMorningData } 
+const getMorningSummary = async() => {
+	const result = await executeQuery("SELECT * FROM data WHERE user_id = $1;",2);
+	return result.rowsOfObjects();
+}
+
+export { postMorningData,getMorningSummary } 
