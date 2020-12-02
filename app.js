@@ -16,5 +16,8 @@ app.use(middleware.requestTimingMiddleware);
 app.use(middleware.serveStaticFilesMiddleware);
 
 app.use(router.routes());
+if (!Deno.env.get('TEST_ENVIRONMENT')) {
+  app.listen({ port: 7777 });
+}
 
 export default app;
