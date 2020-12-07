@@ -1,13 +1,29 @@
 <%- include('./header.ejs') %>
-<h1> test</h1>
-<form method="POST">
+<h1> Report morning: </h1>
+<form method="POST" action = "/behavior/morning">
     <label for="sleepduration">Sleep duration</label>
     <input type="decimal" name="sleepduration" min="0" max="24" />
     <label for="sleepquality">Sleep quality</label>
     <input type="number" name="sleepquality" min="0" max="5" />
     <label for="mood">Mood</label>
     <input type="number" name="mood" min="0" max="5" />
+    <input type="date" id="time" name="time"
+       min="2018-01-01" max="2021-12-31">
     <input type="submit" value="Submit!" />
 </form>
-
+<h1> Report evening: </h1>
+<form method="POST" action = "/behavior/evening">
+    <label for="studytime">Study duration</label>
+    <input type="decimal" name="studytime" min="0" max="24" />
+    <label for="sportstime">Sports duration</label>
+    <input type="decimal" name="sportstime" min="0" max="24" />
+    <label for="mood">Mood</label>
+    <input type="number" name="mood" min="0" max="5" />
+    <label for="eatingquality">regularity and quality of eating</label>
+    <input type="number" name="eatingquality" min="0" max="5" />
+    <input type="date" id="time" name="time"
+       value=""
+       min="2018-01-01" max="2021-12-31">
+    <input type="submit" value="Submit!" />
+</form>
 <%- include('./footer.ejs') %>

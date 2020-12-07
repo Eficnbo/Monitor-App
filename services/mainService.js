@@ -1,8 +1,14 @@
 import {executeQuery} from '../database/database.js'
 
-const postMorningData = async(sleepdur,sleepqua,mood,user_id) => {
+const postMorningData = async(sleepdur,sleepqua,mood,user_id,time) => {
+	console.log(time)
+	await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",sleepdur,sleepqua,mood,user_id,time)
 	
-	await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,NOW());",sleepdur,sleepqua,mood,user_id)
+}
+
+const postEveningData = async(studytime,sportstime,mood,user_id,time) => {
+	
+	await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5;",studytime,sportstime,mood,user_id,time)
 	
 }
 
@@ -13,9 +19,10 @@ const calcAverage = (dat) => {
 	return dat.reduce((a, b) => a + b, 0)/dat.length
 }
 
-const getMorningSummary = async() => {
+const getMorningSummaryWeekly = async() => {
 	//query for last 7 days of data:
-	const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",2);
+	//const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",2);
+	const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",2);
 	const res = result.rowsOfObjects()
 	let avg_sleepdur = []
 	let avg_sleepquality = []
@@ -23,10 +30,8 @@ const getMorningSummary = async() => {
 	let avg_mood = []
 	let avg_studytime = []
 	var i;
-	var z;
-	console.log(res)
+
 	for(i in res) {
-		console.log(res[i])
 		if(res[i].sleepduration) {
 			avg_sleepdur.push(Number(res[i].sleepduration))
 		}
@@ -51,4 +56,4 @@ const getMorningSummary = async() => {
 	return [res,avg_sleepdur,avg_sleepquality,avg_sportstime,avg_studytime,avg_mood]
 }
 
-export { postMorningData,getMorningSummary } 
+export { postMorningData, postEveningData,getMorningSummaryWeekly } 
