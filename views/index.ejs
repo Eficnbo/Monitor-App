@@ -1,9 +1,13 @@
+<%- include('./header.ejs') %>
 <h1> test</h1>
 <form method="POST">
+    <label for="sleepduration">Sleep duration</label>
     <input type="decimal" name="sleepduration" min="0" max="24" />
+    <label for="sleepquality">Sleep quality</label>
     <input type="number" name="sleepquality" min="0" max="5" />
+    <label for="mood">Mood</label>
     <input type="number" name="mood" min="0" max="5" />
     <input type="submit" value="Submit!" />
 </form>
 
-<h2> <%= data %> </h2>
+<%- include('./footer.ejs') %>
