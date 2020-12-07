@@ -1,21 +1,20 @@
 <%- include('./header.ejs') %>
 
 <% if(averages && averages.length > 0) { %>
-    <h2> Summary of the week: </h2>
+    <h2> Summary of the month: </h2>
     
     <ul>
-            <li>avg_sleepdur: <%= averages[0] %></li>
+            <li>  avg_sleepdur: <%= averages[0] %></li>
             <li>  avg_sleepquality: <%= averages[1] %></li>
             <li>  avg_sportstime: <%= averages[2] %></li>
             <li>  avg_studytime: <%= averages[3] %></li>
             <li>  avg_mood: <%= averages[4] %></li>
-            
     </ul>
 
     <% } %>
 
 <% if(data && data.length > 0) { %>
-    <h2> Raw data of the week: </h2>
+    <h2> Raw data of the month: </h2>
     
     <table style="width:100%">
         <tr style='border-bottom: 1.0pt solid windowtext;'>

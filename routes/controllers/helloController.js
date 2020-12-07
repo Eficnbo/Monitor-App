@@ -1,5 +1,5 @@
 import { getHello } from "../../services/helloService.js";
-import {postMorningData,postEveningData,getMorningSummaryWeekly} from "../../services/mainService.js";
+import {postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly} from "../../services/mainService.js";
 
 const hello = ({render}) => {
   render('index.ejs', { data: getHello() });
@@ -22,13 +22,15 @@ const postEvening = async({request,response}) => {
 
 }
 
-const morningSummary = async({render}) =>  {
-  const summary = await getMorningSummaryWeekly()
+const fullSummary = async({render}) =>  {
+  const summary = await getSummaryWeekly()
+  const summaryMonth = await getSummaryMonthly()
   const fullData = summary[0]
+  const fullData2 = summaryMonth[0]
+  summaryMonth.shift()
   summary.shift()
-	render('summary.ejs',{data: fullData,averages: summary});
+	render('summaryWeek.ejs',{data: fullData,averages: summary,data2: fullData2,averages2:summaryMonth});
 }
 
 
-
-export { hello,postMorning,morningSummary,postEvening };
+export { hello,postMorning,fullSummary,postEvening };

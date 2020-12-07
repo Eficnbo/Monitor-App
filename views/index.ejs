@@ -7,10 +7,13 @@
     <input type="number" name="sleepquality" min="0" max="5" />
     <label for="mood">Mood</label>
     <input type="number" name="mood" min="0" max="5" />
-    <input type="date" id="time" name="time"
+    <input type="date" id="time1" name="time"
        min="2018-01-01" max="2021-12-31">
     <input type="submit" value="Submit!" />
 </form>
+<script>
+document.getElementById('time1').valueAsDate = new Date();
+</script>
 <h1> Report evening: </h1>
 <form method="POST" action = "/behavior/evening">
     <label for="studytime">Study duration</label>
@@ -21,9 +24,13 @@
     <input type="number" name="mood" min="0" max="5" />
     <label for="eatingquality">regularity and quality of eating</label>
     <input type="number" name="eatingquality" min="0" max="5" />
-    <input type="date" id="time" name="time"
+    <input type="date" id="time2" name="time"
        value=""
        min="2018-01-01" max="2021-12-31">
     <input type="submit" value="Submit!" />
 </form>
+
+<script>
+    document.getElementById('time2').valueAsDate = new Date();
+</script>
 <%- include('./footer.ejs') %>
