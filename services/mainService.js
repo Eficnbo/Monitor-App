@@ -162,6 +162,7 @@ const getSummaryMonthly = async(id,params) => {
 	avg_sportstime = calcAverage(avg_sportstime)
 	avg_studytime = calcAverage(avg_studytime)
 	avg_mood = calcAverage(avg_mood)
+	
 	return [res,avg_sleepdur,avg_sleepquality,avg_sportstime,avg_studytime,avg_mood]
 }
 

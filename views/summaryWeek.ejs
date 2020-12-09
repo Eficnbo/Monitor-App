@@ -5,7 +5,7 @@
 <% if(averages && averages.length > 0) { %>
     <h2> Summary of the week: </h2>
     
-
+    <% if(data.length != 0) {  %>
     <ul>
             <li>  avg_sleepdur: <%= averages[0] %></li>
             <li>  avg_sleepquality: <%= averages[1] %></li>
@@ -13,7 +13,9 @@
             <li>  avg_studytime: <%= averages[3] %></li>
             <li>  avg_mood: <%= averages[4] %></li>
     </ul>
-
+    <% }else { %>
+        <p>No data for given week</p>
+        <% } %>
     <% } %>
 
     <form method="get" action="/behavior/summary">
@@ -26,7 +28,7 @@
     <% if(averages2 && averages2.length > 0) { %>
         <h2> Summary of the month: </h2>
         
-
+        <% if(data2.length != 0) {  %>
         <ul>
                 <li>  avg_sleepdur: <%= averages2[0] %></li>
                 <li>  avg_sleepquality: <%= averages2[1] %></li>
@@ -34,7 +36,9 @@
                 <li>  avg_studytime: <%= averages2[3] %></li>
                 <li>  avg_mood: <%= averages2[4] %></li>
         </ul>
-    
+        <% } else {%>
+            <p>No data for given month</p>
+            <% } %>
         <% } %>
 
         <form method="get" action="/behavior/summary">
