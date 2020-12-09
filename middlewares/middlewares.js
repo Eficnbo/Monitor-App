@@ -34,6 +34,7 @@ const limitAccessMiddleware = async(context, next) => {
       await next();
     } else {
       context.response.status = 401;
+      context.render('error.ejs')
     }
   } else {
     await next();

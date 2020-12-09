@@ -1,8 +1,9 @@
 import { Router } from "../deps.js";
-import { showLogin,postLogin, hello,postMorning, postEvening,fullSummary,showRegister,postRegister } from "./controllers/helloController.js";
+import {showMain,showLogin,postLogin, hello,postMorning, postEvening,fullSummary,showRegister,postRegister } from "./controllers/helloController.js";
 
 const router = new Router();
 
+router.get('/',showMain)
 router.get('/auth/register', showRegister)
 router.post('/auth/register', postRegister);
 router.get('/auth/login',showLogin)

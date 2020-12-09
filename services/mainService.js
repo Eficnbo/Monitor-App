@@ -1,14 +1,27 @@
 import {executeQuery} from '../database/database.js'
 import {bcrypt} from "../deps.js"
 const postMorningData = async(sleepdur,sleepqua,mood,user_id,time) => {
-	console.log(time)
-	await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",sleepdur,sleepqua,mood,user_id,time)
-	
+	const today = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
+	if(!today || today.rowsOfObjects().length === 0) {
+		await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",sleepdur,sleepqua,mood,user_id,time)
+	}
+	else {
+		await executeQuery("DELETE FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
+		await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",sleepdur,sleepqua,mood,user_id,time)
+	}
 }
 
 const postEveningData = async(studytime,sportstime,mood,user_id,time) => {
 	
-	await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",studytime,sportstime,mood,user_id,time)
+	const today = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
+	if(!today || today.rowsOfObjects().length === 0) {
+		await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",studytime,sportstime,mood,user_id,time)
+	}
+	else {
+		await executeQuery("DELETE FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
+		await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",studytime,sportstime,mood,user_id,time)
+	}
+	
 	
 }
 
@@ -22,7 +35,7 @@ const calcAverage = (dat) => {
 const getSummaryWeekly = async(id) => {
 	//query for last 7 days of data:
 	//const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",2);
-	const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",id);
+	const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+3;",id);
 	const res = result.rowsOfObjects()
 	let avg_sleepdur = []
 	let avg_sleepquality = []
@@ -59,7 +72,7 @@ const getSummaryWeekly = async(id) => {
 const getSummaryMonthly = async(id) => {
 	//query for last 7 days of data:
 	//const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",2);
-	const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-30 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",id);
+	const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-30 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+3;",id);
 	const res = result.rowsOfObjects()
 	let avg_sleepdur = []
 	let avg_sleepquality = []
@@ -138,7 +151,7 @@ const postLog = async(request, response, session) => {
   
 	const passwordCorrect = await bcrypt.compare(password, hash);
 	if (!passwordCorrect) {
-		respnse.status = 401;
+		response.status = 401;
 		return;
 	}
   
@@ -149,4 +162,28 @@ const postLog = async(request, response, session) => {
 	});
 	response.body = 'Authentication successful!';
   }
-export {postLog,postRegis,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly } 
+
+const isTodaySubmitted = async(id) => {
+	
+	const res = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",id)
+	const data = res.rowsOfObjects()
+
+	if(!data || data.length === 0) {
+		return [false,false]
+	}
+	else {
+		if(data.length === 1) {
+			if(data[0].studytime) {
+				return [false,true]
+			}
+			else {
+				return [true,false]
+			}
+		}
+		else {
+			return [true,true]
+		}
+	}
+}
+
+export {isTodaySubmitted,postLog,postRegis,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly } 

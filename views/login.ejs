@@ -1,6 +1,14 @@
+<%- include('./header.ejs') %>
 <h1>Login!</h1>
 <form method="POST" action="/auth/login">
+    <label for="email">Email</label>
     <input type="email" name="email" />
+    <label for="password">Password</label>
     <input type="password" name="password" />
     <input type="submit" value="Login!" />
 </form>
+
+<form method="get" action="/">
+    <button type="submit">Go back</button>
+</form>
+<%- include('./footer.ejs') %>

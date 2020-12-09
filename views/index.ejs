@@ -1,5 +1,8 @@
 <%- include('./header.ejs') %>
 <h1> Report morning: </h1>
+<% if(submitted[0]) { %>
+    <p> You have already reported for this morning, reporting will remove the older task </p>
+<% } %>
 <form method="POST" action = "/behavior/morning">
     <label for="sleepduration">Sleep duration</label>
     <input type="decimal" name="sleepduration" min="0" max="24" />
@@ -14,7 +17,11 @@
 <script>
 document.getElementById('time1').valueAsDate = new Date();
 </script>
+
 <h1> Report evening: </h1>
+<% if(submitted[1]) { %>
+    <p> You have already reported for this evening, reporting will remove the older task </p>
+<%console.log(submitted) } %>
 <form method="POST" action = "/behavior/evening">
     <label for="studytime">Study duration</label>
     <input type="decimal" name="studytime" min="0" max="24" />
