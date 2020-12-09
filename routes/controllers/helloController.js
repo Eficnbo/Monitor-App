@@ -1,6 +1,6 @@
 import { getHello } from "../../services/helloService.js";
-import { handleLogout,isTodaySubmitted,postLog,postRegis,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly} from "../../services/mainService.js";
-
+import { isTodaySubmitted,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend} from "../../services/reportingService.js";
+import {handleLogout,postRegis,postLog} from "../../services/userService.js"
 const hello = async({render,session}) => {
 
   const id = (await session.get('user')).id
@@ -13,7 +13,7 @@ const postMorning = async({request,response,session}) => {
   const id = (await session.get('user')).id
   await postMorningData(data.get('sleepduration'),data.get('sleepquality'),data.get('mood'),id,data.get('time'))
   response.status = 200
-  
+  response.redirect("/behavior/reporting")
 }
 
 const postEvening = async({request,response,session}) => {
@@ -23,13 +23,12 @@ const postEvening = async({request,response,session}) => {
   const id = (await session.get('user')).id
   await postEveningData(data.get('studytime'),data.get('sportstime'),data.get('mood'),id,data.get('time'))
   response.status = 200
-
+  response.redirect("/behavior/reporting")
 }
 
 const fullSummary = async({request,render,session}) =>  {
   const res = request.body()
   const data = await res.value
-  console.log(request.url.search)
   const params = new URLSearchParams(request.url.search);
 
   const id = (await session.get('user')).id
@@ -44,27 +43,29 @@ const fullSummary = async({request,render,session}) =>  {
 }
 
 const showRegister = ({render}) => {
-  render('register.ejs');
+  render('register.ejs',{errors: "",email:''});
 }
 
-const postRegister = async({request, response}) => {
-  await postRegis(request,response)
+const postRegister = async({request, response,render}) => {
+  await postRegis(request,response,render)
 };
 
 const showLogin = ({render}) => {
-  render('login.ejs');
+  render('login.ejs',{data:true});
 }
 
-const postLogin = async({request, response, session}) => {
-  await postLog(request,response,session)
+const postLogin = async({request, response, session,render}) => {
+  await postLog(request,response,session,render)
 }
 
 const postLogout = async({response,session}) => {
   await handleLogout(response,session)
 }
 
-const showMain = async({render}) => {
-  render('main.ejs')
+const showMain = async({render,session}) => {
+  const a  = await session.get("authenticated")
+
+  render('main.ejs',{auth:a,mood: await getTrend(session)})
 }
 
 

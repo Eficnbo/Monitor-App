@@ -1,8 +1,13 @@
 <%- include('./header.ejs') %>
 <h1>Register!</h1>
-<form method="POST" action="/auth/register">
+
+<% if(errors) { %> 
+    <p> <%= errors %> </p>
+<% } %>
+
+<form method="POST" action="/auth/registration">
     <label for="email">Email</label>
-    <input type="email" name="email" />
+    <input type="email" name="email" value= "<%= email %> "/>
     <label for="password">Password</label>
     <input type="password" name="password" />
     <label for="verification">Password verification</label>

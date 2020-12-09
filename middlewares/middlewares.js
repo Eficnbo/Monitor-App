@@ -8,11 +8,18 @@ const errorMiddleware = async(context, next) => {
   }
 }
 
-const requestTimingMiddleware = async({ request }, next) => {
+const requestTimingMiddleware = async({ request,session }, next) => {
+  let id = (await session.get('user'))
+  if(!id) {
+    id = "Anonymous"
+  }
+  else {
+    id = id.id
+  }
   const start = Date.now();
   await next();
   const ms = Date.now() - start;
-  console.log(`${request.method} ${request.url.pathname} - ${ms} ms`);
+  console.log(`Time: ${start} Method: ${request.method} ${request.url.pathname} user: ${id} - ${ms} ms`);
 }
 
 const serveStaticFilesMiddleware = async(context, next) => {
@@ -40,6 +47,7 @@ const limitAccessMiddleware = async(context, next) => {
     await next();
   }
 }
+
 
 export { limitAccessMiddleware, errorMiddleware, requestTimingMiddleware, serveStaticFilesMiddleware };
 

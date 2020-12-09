@@ -1,5 +1,8 @@
 <%- include('./header.ejs') %>
 <h1>Login!</h1>
+<% if(!data) { %>
+    <p>Wrong username or password</p>
+<% } %>
 <form method="POST" action="/auth/login">
     <label for="email">Email</label>
     <input type="email" name="email" />
@@ -8,7 +11,7 @@
     <input type="submit" value="Login!" />
 </form>
 
-<form method="get" action="/auth/register">
+<form method="get" action="/auth/registration">
     <button type="submit">Register</button>
 </form>
 

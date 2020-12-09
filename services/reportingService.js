@@ -1,12 +1,16 @@
 import {executeQuery} from '../database/database.js'
-import {bcrypt} from "../deps.js"
+
 const postMorningData = async(sleepdur,sleepqua,mood,user_id,time) => {
+
+
+
 	const today = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
 	if(!today || today.rowsOfObjects().length === 0) {
 		await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",sleepdur,sleepqua,mood,user_id,time)
 	}
 	else {
-		await executeQuery("DELETE FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
+		
+		await executeQuery("DELETE FROM data WHERE user_id = $1 AND time = CURRENT_DATE AND sleepduration IS NOT NULL;",user_id)
 		await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",sleepdur,sleepqua,mood,user_id,time)
 	}
 }
@@ -18,8 +22,10 @@ const postEveningData = async(studytime,sportstime,mood,user_id,time) => {
 		await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",studytime,sportstime,mood,user_id,time)
 	}
 	else {
-		await executeQuery("DELETE FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
-		await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",studytime,sportstime,mood,user_id,time)
+
+			await executeQuery("DELETE FROM data WHERE user_id = $1 AND time = CURRENT_DATE AND studytime IS NOT NULL;",user_id)
+			await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",studytime,sportstime,mood,user_id,time)
+		
 	}
 	
 	
@@ -64,7 +70,6 @@ const getSummaryWeekly = async(id,params) => {
 		const year = Number(date[0])
 		const week = Number(date[1].substring(1))
 		date = getDateOfISOWeek(week,year)
-		console.log(date)
 		var today = new Date();
 		const number1 = days_between(today,date)
 		
@@ -116,11 +121,8 @@ const getSummaryMonthly = async(id,params) => {
 		const year = Number(date[0])
 		const month = Number(date[1])
 		date = new Date(year,month-1,1)
-		console.log(date)
 		var today = new Date();
-		console.log(today)
 		const number1 = days_between(today,date)
-		console.log(number1)
 		const number3 =number1
 		const number2 = (31-number1)
 		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN (CURRENT_DATE-make_interval(days := $2)) AND (CURRENT_DATE+make_interval(days := $3));",id,number3,number2);
@@ -132,7 +134,7 @@ const getSummaryMonthly = async(id,params) => {
 		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-31 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+3;",id);
 	}
 	const res = result.rowsOfObjects()
-	console.log(res)
+	
 	let avg_sleepdur = []
 	let avg_sleepquality = []
 	let avg_sportstime = []
@@ -166,69 +168,6 @@ const getSummaryMonthly = async(id,params) => {
 	return [res,avg_sleepdur,avg_sleepquality,avg_sportstime,avg_studytime,avg_mood]
 }
 
-const postRegis = async(request, response) => {
-	const body = request.body();
-	const params = await body.value;
-	
-	const email = params.get('email');
-	const password = params.get('password');
-	const verification = params.get('verification');
-  
-	if (password !== verification) {
-	  response.body = 'The entered passwords did not match';
-	  return;
-	}
-  
-	const existingUsers = await executeQuery("SELECT * FROM users WHERE email = $1", email);
-	if (existingUsers.rowCount > 0) {
-	  response.body = 'The email is already reserved.';
-	  return;
-	}
-  
-	const hash = await bcrypt.hash(password);
-	await executeQuery("INSERT INTO users (email, password) VALUES ($1, $2);", email, hash);
-	response.body = 'Registration successful!';
-  };
-
-const postLog = async(request, response, session) => {
-	const body = request.body();
-	const params = await body.value;
-  
-	const email = params.get('email');
-	const password = params.get('password');
-  
-	// check if the email exists in the database
-	const res = await executeQuery("SELECT * FROM users WHERE email = $1;", email);
-	if (res.rowCount === 0) {
-		response.status = 401;
-		return;
-	}
-  
-	// take the first row from the results
-	const userObj = res.rowsOfObjects()[0];
-  
-	const hash = userObj.password;
-  
-	const passwordCorrect = await bcrypt.compare(password, hash);
-	if (!passwordCorrect) {
-		response.status = 401;
-		return;
-	}
-  
-	await session.set('authenticated', true);
-	await session.set('user', {
-		id: userObj.id,
-		email: userObj.email
-	});
-	response.body = 'Authentication successful!';
-}
-
-const handleLogout = async(response,session) => {
-	await session.set("authenticated",false)
-	await session.set('user','')
-	response.redirect('/')
-}
-
 const isTodaySubmitted = async(id) => {
 	
 	const res = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",id)
@@ -252,4 +191,33 @@ const isTodaySubmitted = async(id) => {
 	}
 }
 
-export {handleLogout,isTodaySubmitted,postLog,postRegis,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly } 
+const getTrend = async(session) => {
+	let id = (await session.get('user'))
+	if(!id) {
+		return ""
+	}
+	else {
+		id = id.id
+	}
+	const res1 = await executeQuery("SELECT * FROM data WHERE time=CURRENT_DATE AND user_id=$1;",id)
+	const res2 = await executeQuery("SELECT * FROM data WHERE time=CURRENT_DATE-make_interval(days := 1) AND user_id=$1;",id)
+
+	if(res1.rowsOfObjects()[0] && res1.rowsOfObjects()[1] && res2.rowsOfObjects()[1] &&res2.rowsOfObjects()[0]) {
+		const data1 = (Number(res1.rowsOfObjects()[0].mood) + Number(res1.rowsOfObjects()[1].mood))/2
+		const data2 = (Number(res2.rowsOfObjects()[0].mood) + Number(res2.rowsOfObjects()[1].mood))/2
+		if(!data1 || !data2) {
+			return "Report your data two days in a row to get your feeling message(morning and evening data)!"
+		}
+		if(data1 < data2) {
+			return "Things are looking gloomy today! Your average mood is worse than yesterday!"
+		}
+		else {
+			return "Things are looking bright today! Your mood is better than yesterday(or same)"
+		}
+	}
+	else {
+		return "You must post two days in a row your morning and evening data in order to get your feeling message!"
+	}
+}
+
+export {isTodaySubmitted,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend } 

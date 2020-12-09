@@ -1,16 +1,31 @@
 <%- include('./header.ejs') %>
-<form method="get" action="/auth/login">
-    <button type="submit">Login</button>
-</form>
-<form method="get" action="/auth/register">
-    <button type="submit">Register</button>
-</form>
+
+
+<% if(auth) { %>
+    <form method="post" action="/auth/logout">
+        <button type="submit" id="logout">Logout</button>
+    </form>
+    
 <form method="get" action="/behavior/reporting">
     <button type="submit">Report daily stuff</button>
 </form>
 <form method="get" action="/behavior/summary">
     <button type="submit">Summary</button>
 </form>
+    <p><%= mood %> </p>
+<% } else {%>
 
+    <form method="get" action="/auth/login">
+        <button type="submit">Login</button>
+    </form>
+    <form method="get" action="/auth/registration">
+        <button type="submit">Register</button>
+    </form>
 
+<% } %>
+
+<p>Hello! This is a self development tool. A user once registered and logged in can report daily tasks such as sleeping, sports and studying. You can view your monthly and weekly summaries and see all kinds of improvements in your everyday life!
+Start by logging in and then trying to report daily tasks!
+
+</p>
 <%- include('./footer.ejs') %>
