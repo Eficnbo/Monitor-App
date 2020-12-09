@@ -26,15 +26,20 @@ const postEvening = async({request,response,session}) => {
 
 }
 
-const fullSummary = async({render,session}) =>  {
+const fullSummary = async({request,render,session}) =>  {
+  const res = request.body()
+  const data = await res.value
+  console.log(request.url.search)
+  const params = new URLSearchParams(request.url.search);
+
   const id = (await session.get('user')).id
-  const summary = await getSummaryWeekly(id)
-  const summaryMonth = await getSummaryMonthly(id)
+  const summary = await getSummaryWeekly(id,params)
+  const summaryMonth = await getSummaryMonthly(id,params)
   const fullData = summary[0]
   const fullData2 = summaryMonth[0]
   summaryMonth.shift()
   summary.shift()
-  console.log(id,"a")
+
 	render('summaryWeek.ejs',{data: fullData,averages: summary,data2: fullData2,averages2:summaryMonth});
 }
 

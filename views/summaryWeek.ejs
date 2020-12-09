@@ -1,8 +1,11 @@
 <%- include('./header.ejs') %>
 
+
+
 <% if(averages && averages.length > 0) { %>
     <h2> Summary of the week: </h2>
     
+
     <ul>
             <li>  avg_sleepdur: <%= averages[0] %></li>
             <li>  avg_sleepquality: <%= averages[1] %></li>
@@ -13,36 +16,17 @@
 
     <% } %>
 
-<% if(data && data.length > 0) { %>
-    <h2> Raw data of the week: </h2>
-    
-    <table style="width:100%">
-        <tr style='border-bottom: 1.0pt solid windowtext;'>
-            <th>Sleep Duration</th>
-            <th>Sleep quality</th>
-            <th>Studytime</th>
-            <th>Sportstime</th>
-            <th>Mood</th>
-            <th>time</th>
-          </tr>
-        <% data.forEach((error) => { %>
-            <tr>
-                  <td><%= error.sleepduration %></td>
-                  <td><%= error.sleepquality %></td>
-                  <td><%= error.studytime %></td>
-                  <td><%= error.sportstime %></td>
-                  <td><%= error.mood %></td>
-                  <td><%= error.time %></td>
-            </tr>
-            
-        <% }); %>
-    
-    </table>
-    <% } %>
-    
+    <form method="get" action="/behavior/summary">
+        <label for="week">Select week - default is current week </label>
+        <input type="week" id="week" name="week"
+        min="2000-W0" max="2021-W52">
+        <input type="submit" value="Check week's statistics!" />
+    </form>  
+
     <% if(averages2 && averages2.length > 0) { %>
         <h2> Summary of the month: </h2>
         
+
         <ul>
                 <li>  avg_sleepdur: <%= averages2[0] %></li>
                 <li>  avg_sleepquality: <%= averages2[1] %></li>
@@ -52,9 +36,45 @@
         </ul>
     
         <% } %>
-    
+
+        <form method="get" action="/behavior/summary">
+            <label for="month">Select month - default is current month </label>
+            <input type="month" id="month" name="month"
+            min="2000-01" max="2021-12">
+            <input type="submit" value="Check month's statistics!" />
+        </form> 
+
+        <% if(data && data.length > 0) { %>
+            <h3> Raw data of the week: </h3>
+            
+            <table style="width:100%">
+                <tr style='border-bottom: 1.0pt solid windowtext;'>
+                    <th>Sleep Duration</th>
+                    <th>Sleep quality</th>
+                    <th>Studytime</th>
+                    <th>Sportstime</th>
+                    <th>Mood</th>
+                    <th>time</th>
+                  </tr>
+                <% data.forEach((error) => { %>
+                    <tr>
+                          <td><%= error.sleepduration %></td>
+                          <td><%= error.sleepquality %></td>
+                          <td><%= error.studytime %></td>
+                          <td><%= error.sportstime %></td>
+                          <td><%= error.mood %></td>
+                          <td><%= error.time %></td>
+                    </tr>
+                    
+                <% }); %>
+            
+            </table>
+            <% } %>
+                 
+
+
     <% if(data2 && data2.length > 0) { %>
-        <h2> Raw data of the month: </h2>
+        <h3> Raw data of the month: </h3>
         
         <table style="width:100%">
             <tr style='border-bottom: 1.0pt solid windowtext;'>
