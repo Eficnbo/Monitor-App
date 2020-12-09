@@ -1,6 +1,7 @@
 <%- include('./header.ejs') %>
-
-
+<% if(user) { %> 
+    <p>Logged in as <%= user %> </p>
+<% } %>
 <% if(auth) { %>
     <form method="post" action="/auth/logout">
         <button type="submit" id="logout">Logout</button>

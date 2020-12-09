@@ -64,8 +64,15 @@ const postLogout = async({response,session}) => {
 
 const showMain = async({render,session}) => {
   const a  = await session.get("authenticated")
-
-  render('main.ejs',{auth:a,mood: await getTrend(session)})
+  const user = await session.get('user')
+  let email;
+  if(user) {
+    email = user.email
+  }
+  else {
+    "Not logged in"
+  }
+  render('main.ejs',{auth:a,mood: await getTrend(session),user:email})
 }
 
 
