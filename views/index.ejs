@@ -1,4 +1,9 @@
 <%- include('./header.ejs') %>
+
+<form method="post" action="/auth/logout">
+    <button type="submit" id="logout">Logout</button>
+</form>
+
 <h1> Report morning: </h1>
 <% if(submitted[0]) { %>
     <p> You have already reported for this morning, reporting will remove the older task </p>

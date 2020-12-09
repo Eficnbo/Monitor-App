@@ -161,7 +161,13 @@ const postLog = async(request, response, session) => {
 		email: userObj.email
 	});
 	response.body = 'Authentication successful!';
-  }
+}
+
+const handleLogout = async(response,session) => {
+	await session.set("authenticated",false)
+	await session.set('user','')
+	response.redirect('/')
+}
 
 const isTodaySubmitted = async(id) => {
 	
@@ -186,4 +192,4 @@ const isTodaySubmitted = async(id) => {
 	}
 }
 
-export {isTodaySubmitted,postLog,postRegis,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly } 
+export {handleLogout,isTodaySubmitted,postLog,postRegis,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly } 

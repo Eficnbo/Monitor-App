@@ -1,5 +1,5 @@
 import { getHello } from "../../services/helloService.js";
-import {isTodaySubmitted,postLog,postRegis,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly} from "../../services/mainService.js";
+import { handleLogout,isTodaySubmitted,postLog,postRegis,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly} from "../../services/mainService.js";
 
 const hello = async({render,session}) => {
 
@@ -54,9 +54,14 @@ const postLogin = async({request, response, session}) => {
   await postLog(request,response,session)
 }
 
+const postLogout = async({response,session}) => {
+  await handleLogout(response,session)
+}
+
 const showMain = async({render}) => {
   render('main.ejs')
 }
 
 
-export { hello,postMorning,fullSummary,postEvening,showRegister,postRegister,showLogin, postLogin,showMain};
+
+export { postLogout,hello,postMorning,fullSummary,postEvening,showRegister,postRegister,showLogin, postLogin,showMain};
