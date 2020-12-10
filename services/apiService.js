@@ -6,8 +6,12 @@ const getSummary = async() => {
     return result.rowsOfObjects()
 }
 
-const getSummaryDay = async() => {
-    
+const getSummaryDay = async(year,month,day) => {
+    if(month > 12 || day > 31 || day < 1 || month < 0 || year < 2000 || year > 2100) {
+        return []
+    }
+    const result = await executeQuery("SELECT  AVG(mood) as mood ,AVG(sportstime) as sportstime ,AVG(studytime) as studytime, AVG(sleepduration) as sleepduration, AVG(sleepquality) as sleepquality FROM data WHERE time = make_date($1,$2,$3);",year,month,day)
+    return result.rowsOfObjects()
 }
 
 export {getSummary,getSummaryDay}
