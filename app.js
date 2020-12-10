@@ -2,6 +2,7 @@ import { Application } from "./deps.js";
 import { router } from "./routes/routes.js";
 import * as middleware from './middlewares/middlewares.js';
 import { Session,viewEngine, engineFactory, adapterFactory,bcrypt } from "./deps.js";
+import { config } from "./config/config.js";
 
 const app = new Application();
 
@@ -22,7 +23,7 @@ app.use(middleware.serveStaticFilesMiddleware);
 
 app.use(router.routes());
 if (!Deno.env.get('TEST_ENVIRONMENT')) {
-  app.listen({ port: 7777 });
+  app.listen({ port: config.port });
 }
 
 export default app;

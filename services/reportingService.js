@@ -2,8 +2,6 @@ import {executeQuery} from '../database/database.js'
 
 const postMorningData = async(sleepdur,sleepqua,mood,user_id,time) => {
 
-
-
 	const today = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time = CURRENT_DATE;",user_id)
 	if(!today || today.rowsOfObjects().length === 0) {
 		await executeQuery("INSERT INTO data(sleepduration,sleepquality,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",sleepdur,sleepqua,mood,user_id,time)
@@ -27,7 +25,6 @@ const postEveningData = async(studytime,sportstime,mood,user_id,time) => {
 			await executeQuery("INSERT INTO data(studytime,sportstime,mood,user_id,time) VALUES($1,$2,$3,$4,$5);",studytime,sportstime,mood,user_id,time)
 		
 	}
-	
 	
 }
 
