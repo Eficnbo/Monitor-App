@@ -6,25 +6,25 @@ Running locally:
 
 Make the following tables for your database:
 
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(320) NOT NULL,
-  password CHAR(60) NOT NULL
-);
+    CREATE TABLE users (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(320) NOT NULL,
+      password CHAR(60) NOT NULL
+    );
 
-CREATE TABLE data (
-id SERIAL PRIMARY KEY,
-sleepduration DECIMAL,
-sleepquality INTEGER,
-studytime DECIMAL,
-sportstime DECIMAL,
-mood INTEGER,
-user_id INTEGER REFERENCES users(id),
-time DATE
-);
+    CREATE TABLE data (
+      id SERIAL PRIMARY KEY,
+      sleepduration DECIMAL,
+      sleepquality INTEGER,
+      studytime DECIMAL,
+      sportstime DECIMAL,
+      mood INTEGER,
+      user_id INTEGER REFERENCES users(id),
+      time DATE
+    );
 
 
-CREATE UNIQUE INDEX ON users((lower(email)));
+    CREATE UNIQUE INDEX ON users((lower(email)));
 
 
 Then change the database configurations to match yours, create a .env file(touch .env on linux) under the root folder:
