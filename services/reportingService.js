@@ -69,13 +69,12 @@ const getSummaryWeekly = async(id,params) => {
 		date = getDateOfISOWeek(week,year)
 		var today = new Date();
 		const number1 = days_between(today,date)
-		
-		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-(EXTRACT(DOW FROM NOW())::INTEGER-7-$2) AND NOW()::DATE-(EXTRACT(DOW from NOW())::INTEGER+3-$2);",id,number1);
+		const numb2 = 7+number1
+		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN (CURRENT_DATE-make_interval(days := $2)) AND (CURRENT_DATE-make_interval(days := $3));",id,numb2,number1)	
 	}
 	else {
 	//query for last 7 days of data:
-	//const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",2);
-		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+3;",id);
+		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN (CURRENT_DATE-make_interval(days := 7)) AND (CURRENT_DATE);",id)
 	}
 	const res = result.rowsOfObjects()
 	let avg_sleepdur = []
@@ -128,7 +127,8 @@ const getSummaryMonthly = async(id,params) => {
 	else {
 	//query for last 7 days of data:
 	//const result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-7 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+2;",2);
-		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN CURRENT_DATE-EXTRACT(DOW FROM NOW())::INTEGER-31 AND NOW()::DATE-EXTRACT(DOW from NOW())::INTEGER+3;",id);
+		result = await executeQuery("SELECT * FROM data WHERE user_id = $1 AND time BETWEEN (CURRENT_DATE-make_interval(days := 31)) AND (CURRENT_DATE);",id);
+
 	}
 	const res = result.rowsOfObjects()
 	

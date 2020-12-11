@@ -3,8 +3,15 @@ import { config } from "../config/config.js";
 
 
 const CONCURRENT_CONNECTIONS = 3;
+let db;
 const DATABASE_URL = Deno.env.toObject().DATABASE_URL;
-const connectionPool = new Pool(DATABASE_URL, CONCURRENT_CONNECTIONS);
+if(Deno.args.length == 0) {
+	db = config.database
+}
+else {
+	db= DATABASE_URL
+}
+const connectionPool = new Pool(db, CONCURRENT_CONNECTIONS);
 
 const executeQuery = async(query, ...params) => {
   const client = await connectionPool.connect();
