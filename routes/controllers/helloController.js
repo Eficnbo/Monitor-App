@@ -1,10 +1,11 @@
 import { getHello } from "../../services/helloService.js";
 import { isTodaySubmitted,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend} from "../../services/reportingService.js";
 import {handleLogout,postRegis,postLog} from "../../services/userService.js"
-const hello = async({render,session}) => {
+const hello = async({render,session,response}) => {
 
   const id = (await session.get('user')).id
   render('index.ejs', { submitted:await isTodaySubmitted(id) });
+  response.status = 200
 };
 
 const postMorning = async({request,response,session}) => {
@@ -42,7 +43,7 @@ const fullSummary = async({request,render,session}) =>  {
 	render('summaryWeek.ejs',{data: fullData,averages: summary,data2: fullData2,averages2:summaryMonth});
 }
 
-const showRegister = ({render}) => {
+const showRegister = ({render,response}) => {
   render('register.ejs',{errors: "",email:''});
 }
 
@@ -50,8 +51,9 @@ const postRegister = async({request, response,render}) => {
   await postRegis(request,response,render)
 };
 
-const showLogin = ({render}) => {
-  render('login.ejs',{data:true});
+const showLogin = ({render,response}) => {
+	render('login.ejs',{data:true});
+
 }
 
 const postLogin = async({request, response, session,render}) => {
@@ -62,7 +64,7 @@ const postLogout = async({response,session}) => {
   await handleLogout(response,session)
 }
 
-const showMain = async({render,session}) => {
+const showMain = async({render,session,response}) => {
   const a  = await session.get("authenticated")
   const user = await session.get('user')
   let email;

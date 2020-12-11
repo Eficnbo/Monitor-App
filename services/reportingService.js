@@ -217,4 +217,4 @@ const getTrend = async(session) => {
 	}
 }
 
-export {isTodaySubmitted,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend } 
+export {isTodaySubmitted,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend, days_between,calcAverage } 
