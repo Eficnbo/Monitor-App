@@ -27,8 +27,15 @@ Make the following tables for your database:
     CREATE UNIQUE INDEX ON users((lower(email)));
 
 
+
+
 Then change the database configurations to match yours, go to the .env file under the root folder:
+
+NOTE the zip file contains the .env file but the submission folder under the course page didn't seem to contain it (it is hidden file, might be the case) so in the case of the command: ls -a not containing the .env file:
+
+	Create the .env file under the root folder(touch .env) and under the /tests folder: cd /tests, touch .env
  
+
 Then modify the .env file:
 
 ./env
@@ -194,8 +201,8 @@ Landing page (i.e. page at the root path of the application):
 
 Testing:
 
-    16 tests meaningful tests under /tests folder
-
+    16  meaningful tests under /tests folder
+	NOTE THAT THE ERROR MESSAGE LEAKED.... COMES FROM USING POOLED DATABASES, THE ERRORS MESSAGE WOULD BE DIFFERENT IF IT WOULD COME FROM THE APP OR TESTS ITSELF
 
 Security:
 
