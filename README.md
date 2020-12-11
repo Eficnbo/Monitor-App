@@ -27,7 +27,7 @@ Make the following tables for your database:
     CREATE UNIQUE INDEX ON users((lower(email)));
 
 
-Then change the database configurations to match yours, create a .env file(touch .env on linux) under the root folder:
+Then change the database configurations to match yours, go to the .env file under the root folder:
  
 Then modify the .env file:
 
@@ -38,7 +38,6 @@ Then modify the .env file:
   user= USER
   password= PASSWORD
   port= 5432
-
 
 NOTE THE .ENV FILE FORMAT IS DIFFERENT FROM JAVASCRIPT OBJECTS, NO STRING CHARACTERS " AND = INSTEAD OF :
 
