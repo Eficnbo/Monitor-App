@@ -33,11 +33,11 @@ Then modify the .env file:
 
 ./env
  
-  hostname= YOURHOSTNAME
-  database= YOURDATABASE
-  user= USER
-  password= PASSWORD
-  port= 5432
+    hostname= YOURHOSTNAME
+    database= YOURDATABASE
+    user= USER
+    password= PASSWORD
+    port= 5432
 
 NOTE THE .ENV FILE FORMAT IS DIFFERENT FROM JAVASCRIPT OBJECTS, NO STRING CHARACTERS " AND = INSTEAD OF :
 
