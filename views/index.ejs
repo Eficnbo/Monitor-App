@@ -1,4 +1,4 @@
-<%- include('./header.ejs') %>
+<%- include('./partials/header.ejs') %>
 
 <form method="post" action="/auth/logout">
     <button type="submit" id="logout">Logout</button>
@@ -49,4 +49,4 @@ document.getElementById('time1').valueAsDate = new Date();
 <script>
     document.getElementById('time2').valueAsDate = new Date();
 </script>
-<%- include('./footer.ejs') %>
+<%- include('./partials/footer.ejs') %>

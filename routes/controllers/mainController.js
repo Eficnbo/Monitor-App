@@ -1,5 +1,5 @@
 import { getHello } from "../../services/helloService.js";
-import { isTodaySubmitted,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend} from "../../services/reportingService.js";
+import { isTodaySubmitted,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend,getAllMood} from "../../services/reportingService.js";
 import {handleLogout,postRegis,postLog} from "../../services/userService.js"
 const hello = async({render,session,response}) => {
 
@@ -27,14 +27,14 @@ const postEvening = async({request,response,session}) => {
   response.redirect("/behavior/reporting")
 }
 
-const fullSummary = async({request,render,session}) =>  {
+const fullSummary = async({request,render,session,response}) =>  {
   const res = request.body()
   const data = await res.value
   const params = new URLSearchParams(request.url.search);
 
   const id = (await session.get('user')).id
-  const summary = await getSummaryWeekly(id,params)
-  const summaryMonth = await getSummaryMonthly(id,params)
+  const summary = await getSummaryWeekly(id,params,response)
+  const summaryMonth = await getSummaryMonthly(id,params,response)
   const fullData = summary[0]
   const fullData2 = summaryMonth[0]
   summaryMonth.shift()
@@ -74,7 +74,7 @@ const showMain = async({render,session,response}) => {
   else {
     "Not logged in"
   }
-  render('main.ejs',{auth:a,mood: await getTrend(session),user:email})
+  render('main.ejs',{auth:a,mood: await getTrend(session),user:email,allMood: await getAllMood()})
 }
 
 

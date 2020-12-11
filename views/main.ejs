@@ -1,4 +1,4 @@
-<%- include('./header.ejs') %>
+<%- include('./partials/header.ejs') %>
 <% if(user) { %> 
     <p>Logged in as <%= user %> </p>
 <% } %>
@@ -28,5 +28,21 @@
 <p>Hello! This is a self development tool. A user once registered and logged in can report daily tasks such as sleeping, sports and studying. You can view your monthly and weekly summaries and see all kinds of improvements in your everyday life!
 Start by logging in and then trying to report daily tasks!
 
+YOu can report both evening and morning behaviors under /behavior/reporting or by click the reporting button!
+
 </p>
-<%- include('./footer.ejs') %>
+
+<p> Some moods of random users using our app! </p>
+
+<% if(allMood) { %>
+	<ul>
+    <% allMood.forEach((task) => { %>
+        <li>
+            <%= task.mood %>
+        </li>
+    <% }); %>
+</ul>	
+<% } %>
+
+
+<%- include('./partials/footer.ejs') %>

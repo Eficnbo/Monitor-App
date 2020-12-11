@@ -1,5 +1,5 @@
 import { Router } from "../deps.js";
-import {showMain,showLogin,postLogin, hello,postMorning, postEvening,fullSummary,showRegister,postRegister,postLogout } from "./controllers/helloController.js";
+import {showMain,showLogin,postLogin, hello,postMorning, postEvening,fullSummary,showRegister,postRegister,postLogout } from "./controllers/mainController.js";
 import {apiSummary, apiSummaryDay} from "../routes/apis/api.js"
 const router = new Router();
 

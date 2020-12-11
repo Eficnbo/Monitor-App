@@ -59,13 +59,26 @@ function days_between(date1, date2) {
 
 }
 
-const getSummaryWeekly = async(id,params) => {
+const getSummaryWeekly = async(id,params,response) => {
 	let date,result;
 	if(params.get('week')) {
 		date = (params.get('week'))
 		date = date.split('-')
 		const year = Number(date[0])
-		const week = Number(date[1].substring(1))
+		let week;
+		if(date[1]) {
+			week = Number(date[1].substring(1))
+		}
+		else {
+			week = "?"
+		}
+                if(!Number.isInteger(week) || week > 52 || week < 0) {
+                        response.body = "Invalid week, must be number or between 1 and 12: format example= 2020-W49"
+                }
+                if(!Number.isInteger(year) || year > 2100 || year< 2000) {
+                        response.body = "Invalid year, must be number or between 2000 and 2100: format example= 2020-W49"
+                }
+
 		date = getDateOfISOWeek(week,year)
 		var today = new Date();
 		const number1 = days_between(today,date)
@@ -109,13 +122,21 @@ const getSummaryWeekly = async(id,params) => {
 	return [res,avg_sleepdur,avg_sleepquality,avg_sportstime,avg_studytime,avg_mood]
 }
 
-const getSummaryMonthly = async(id,params) => {
+const getSummaryMonthly = async(id,params,response) => {
 	let date,result;
 	if(params.get('month')) {
 		date = (params.get('month'))
-		date = date.split('-')
-		const year = Number(date[0])
-		const month = Number(date[1])
+	        date = date.split('-')
+                const year = Number(date[0])
+                const month = Number(date[1])
+
+		if(!Number.isInteger(month) || month > 12 || month < 0) {
+			response.body = "Invalid month, must be number or between 1 and 12: format example= 2020-11"
+		}
+                if(!Number.isInteger(year) || year > 2100 || year< 2000) {
+                        response.body = "Invalid year, must be number or between 2000 and 2100: format example= 2020-W49"
+                }
+
 		date = new Date(year,month-1,1)
 		var today = new Date();
 		const number1 = days_between(today,date)
@@ -206,10 +227,10 @@ const getTrend = async(session) => {
 			return "Report your data two days in a row to get your feeling message(morning and evening data)!"
 		}
 		if(data1 < data2) {
-			return "Things are looking gloomy today! Your average mood is worse than yesterday!"
+			return "Things are looking gloomy today! Your average mood is worse than yesterday! Users' average was: "+data1+ "!"
 		}
 		else {
-			return "Things are looking bright today! Your mood is better than yesterday(or same)"
+			return "Things are looking bright today! Your mood is better than yesterday(or same)! Users' average was: "+data1+ "!"
 		}
 	}
 	else {
@@ -217,4 +238,11 @@ const getTrend = async(session) => {
 	}
 }
 
-export {isTodaySubmitted,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend, days_between,calcAverage } 
+const getAllMood = async() =>  {
+	const result = await executeQuery("SELECT mood FROM data LIMIT 5;")
+	return result.rowsOfObjects()
+}
+
+
+
+export {getAllMood,isTodaySubmitted,postMorningData, postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend, days_between,calcAverage } 

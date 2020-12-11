@@ -1,4 +1,4 @@
-<%- include('./header.ejs') %>
+<%- include('./partials/header.ejs') %>
 
 
 <form method="get" action="/">
@@ -22,7 +22,7 @@
     <% } %>
 
     <form method="get" action="/behavior/summary">
-        <label for="week">Select week - default is current week </label>
+        <label for="week">Select week - default is current week: for example: 2020-W12 to select 2020 week 12 </label>
         <input type="week" id="week" name="week"
         min="2000-W0" max="2021-W52">
         <input type="submit" value="Check week's statistics!" />
@@ -45,7 +45,7 @@
         <% } %>
 
         <form method="get" action="/behavior/summary">
-            <label for="month">Select month - default is current month </label>
+            <label for="month">Select month - default is current month: for example: 2020-12 to select 2020 December </label>
             <input type="month" id="month" name="month"
             min="2000-01" max="2021-12">
             <input type="submit" value="Check month's statistics!" />
@@ -107,4 +107,4 @@
         </table>
         <% } %>
 
-<%- include('./footer.ejs') %>
+<%- include('./partials/footer.ejs') %>
