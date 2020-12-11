@@ -27,9 +27,20 @@ time DATE
 CREATE UNIQUE INDEX ON users((lower(email)));
 
 
-Then change the database configurations to match yours:
+Then change the database configurations to match yours, create a .env file(touch .env on linux) under the root folder:
+ 
+Then modify the .env file:
 
-	./config/config.js => config.database...
+./env
+ 
+  hostname= YOURHOSTNAME
+  database= YOURDATABASE
+  user= USER
+  password= PASSWORD
+  port= 5432
+
+
+NOTE THE .ENV FILE FORMAT IS DIFFERENT FROM JAVASCRIPT OBJECTS, NO STRING CHARACTERS " AND = INSTEAD OF :
 
 
 Go to the root and:

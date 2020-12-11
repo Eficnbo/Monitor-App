@@ -1,12 +1,13 @@
 import { Pool } from "../deps.js";
-import { config } from "../config/config.js";
+import { dataConfig } from "../config/config.js";
 
 
 const CONCURRENT_CONNECTIONS = 3;
 let db;
 const DATABASE_URL = Deno.env.toObject().DATABASE_URL;
+
 if(Deno.args.length == 0) {
-	db = config.database
+	db = dataConfig.database
 }
 else {
 	db= DATABASE_URL

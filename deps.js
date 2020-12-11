@@ -5,5 +5,5 @@ export { Session } from "https://deno.land/x/session@v1.0.0/mod.ts";
 export * as bcrypt from "https://deno.land/x/bcrypt@v0.2.4/mod.ts";
 export { superoak } from "https://deno.land/x/superoak@2.3.1/mod.ts";
 export { assertEquals } from "https://deno.land/std@0.78.0/testing/asserts.ts";
-
+export { config } from 'https://deno.land/x/dotenv/mod.ts';
 

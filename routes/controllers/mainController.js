@@ -1,4 +1,3 @@
-import { getHello } from "../../services/helloService.js";
 import { isTodaySubmitted,postMorningData,postEveningData,getSummaryWeekly, getSummaryMonthly,getTrend,getAllMood} from "../../services/reportingService.js";
 import {handleLogout,postRegis,postLog} from "../../services/userService.js"
 const hello = async({render,session,response}) => {
