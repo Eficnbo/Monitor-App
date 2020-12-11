@@ -49,9 +49,14 @@ Go to the root and:
 localhost:7777/ to get to the landing page!
 
 To run the tests:
+
 Go to the tests folder: cd tests and then:
 
+	modify the ./env file under the /tests folder similarly as above and then:
+
 	- deno test --allow-net --allow-read --allow-env --unstable runTests.js
+
+NOTE tests won't run unless you modify the .env file under /tests, different from the ./env file under root.
 
 ## Features Checklist:
 
